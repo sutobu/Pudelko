@@ -447,20 +447,78 @@ namespace PudelkoUnitTests
 
 
         #region Pole, Objętość ===================================
-        // ToDo
+        [TestMethod]
+
+        public void Test_Objetosc()
+        {
+            var testCases = new List<(double a, double b, double c, double expectedObjetosc)>
+            {
+                (1.0, 2.0, 3.0, 1.0 * 2.0 * 3.0),
+                (5.0, 6.0, 3.0, 5.0 * 6.0 * 3.0),
+                (1.0, 1.0, 1.0, 1.0 * 1.0 * 1.0),
+
+            };
+            foreach (var (a, b, c, expectedObjetosc) in testCases)
+            {
+                var p = new Pudelko(a, b, c);
+                Assert.AreEqual(expectedObjetosc, p.Objetosc, accuracy);
+            }
+        }
+
+        [TestMethod]
+        public void Pole_Test()
+        {
+            var testCases = new List<(double a, double b, double c, double expectedPole)>
+                    {
+                        (2.1, 3.651, 0.9, 2 * (2.1 * 3.651 + 3.651 * 0.9 + 2.1 * 0.9)),
+                        (1.0, 5.0, 9.0, 2 * (1.0 * 5.0 + 5.0 * 9.0 + 1.0 * 9.0)),
+                        (0.8, 0.7, 0.7, 2 * (0.8 * 0.7 + 0.7 * 0.7 + 0.8 * 0.7))
+                    };
+
+            foreach (var (a, b, c, expectedPole) in testCases)
+            {
+                var p = new Pudelko(a, b, c);
+                Assert.AreEqual(expectedPole, p.Pole, accuracy);
+            }
+        }
 
         #endregion
 
         #region Equals ===========================================
-        // ToDo
+        [TestMethod]
+        public void Equals_Test()
+        {
+            var testCases = new List<(double a1, double b1, double c1, double a2, double b2, double c2, bool expected)>
+            {
+                (2.1, 3.651, 0.9, 2.1, 3.651, 0.9, true),
+                (2.1, 3.651, 0.9, 2.1, 3.65, 0.9, false),
+                (1.0, 5.0, 9.0, 1.0, 5.0, 9.0, true),
+                (1.0, 5.0, 9.0, 9.0, 5.0, 1.0, false),
+                (0.8, 0.7, 0.7, 0.8, 0.7, 0.7, true),
+                (0.5, 0.5, 0.5, 0.6, 0.5, 0.5, false)
+            };
+
+            foreach (var (a1, b1, c1, a2, b2, c2, expected) in testCases)
+            {
+                var p1 = new Pudelko(a1, b1, c1);
+                var p2 = new Pudelko(a2, b2, c2);
+                Assert.AreEqual(expected, p1.Equals(p2));
+            }
+
+        }
+
         #endregion
 
         #region Operators overloading ===========================
-        // ToDo
-        #endregion
-
-        #region Conversions =====================================
         [TestMethod]
+        public void Overloading_Test()
+        {
+
+        }
+#endregion
+
+#region Conversions =====================================
+[TestMethod]
         public void ExplicitConversion_ToDoubleArray_AsMeters()
         {
             var p = new Pudelko(1, 2.1, 3.231);
