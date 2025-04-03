@@ -511,14 +511,60 @@ namespace PudelkoUnitTests
 
         #region Operators overloading ===========================
         [TestMethod]
-        public void Overloading_Test()
+        public void Overloading_Equality_Test()
         {
+            var testCases = new List<(double a1, double b1, double c1, double a2, double b2, double c2, bool expected)>
+            {
+                (2.1, 3.651, 0.9, 2.1, 3.651, 0.9, true),
+                (2.1, 3.651, 0.9, 2.1, 3.65, 0.9, false), 
+            }
+            foreach(var (a1, b1, c1, a2, b2, c2, expected) in testCases)
+            {
+                var p1 = new Pudelko(a1, b1, c1);
+                var p2 = new Pudelko(a2, b2, c2);
+                Assert.AreEqual(expected, p1 == p2);
+            }
 
         }
-#endregion
 
-#region Conversions =====================================
-[TestMethod]
+        [TestMethod]
+        public void Overloading_Inequality_Test()
+        {
+            var testCases = new List<(double a1, double b1, double c1, double a2, double b2, double c2, bool expected)>
+            {
+                (2.1, 3.651, 0.9, 2.1, 3.651, 0.9, false),
+                (2.1, 3.651, 0.9, 2.1, 3.65, 0.9, true),
+            };
+            foreach (var (a1, b1, c1, a2, b2, c2, expected) in testCases)
+            {
+                var p1 = new Pudelko(a1, b1, c1);
+                var p2 = new Pudelko(a2, b2, c2);
+                Assert.AreEqual(expected, p1 != p2);
+            }
+        }
+
+        [TestMethod]
+        public void Oveloading_Addition_Test()
+        {
+            var testCases = new List<(double a1, double b1, double c1, double a2, double b2, double c2, double expectedA, double expectedB, double expectedC)>
+            {
+                (2.1, 3.651, 0.9, 2.1, 3.651, 0.9, 4.2, 7.302, 1.8),
+                (2.1, 3.651, 0.9, 0.5, 0.5, 0.5, 2.6, 4.151, 1.4),
+            };
+            foreach (var (a1, b1, c1, a2, b2, c2, expectedA, expectedB, expectedC) in testCases)
+            {
+                var p1 = new Pudelko(a1, b1, c1);
+                var p2 = new Pudelko(a2, b2, c2);
+                var result = p1 + p2;
+                AssertPudelko(result, expectedA, expectedB, expectedC);
+            }
+        }
+        #endregion
+
+
+
+        #region Conversions =====================================
+        [TestMethod]
         public void ExplicitConversion_ToDoubleArray_AsMeters()
         {
             var p = new Pudelko(1, 2.1, 3.231);
@@ -567,7 +613,22 @@ namespace PudelkoUnitTests
         #endregion
 
         #region Parsing =========================================
+        [TestMethod]
+        public void Parsing_Test()
+        {
+            var testCases = new List<(string input, double a, double b, double c)>
+            {
+                ("1.0 m × 2.5 m × 3.1 m", 1.0, 2.5, 3.1),
+                ("100 cm × 25.5 cm × 3.1 cm", 1.0, 0.255, 0.031),
+                ("100 mm × 25 mm × 3 mm", 0.1, 0.025, 0.003)
+            };
 
+            foreach (var (input, a, b, c) in testCases)
+            {
+                var p = Pudelko.Parse(input);
+                AssertPudelko(p, a, b, c);
+            }
+        }
         #endregion
 
     }
